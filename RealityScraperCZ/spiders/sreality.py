@@ -155,7 +155,7 @@ class SrealitySpider(scrapy.Spider):
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
         sql_date_yesterday = yesterday.strftime('%Y-%m-%d')
 
-        query_advert = 'SELECT advert_id FROM advert_tbl WHERE advert_id={0};'.format(prop_dict['sreality_id'])
+        query_advert = 'SELECT sreality_id FROM advert_tbl WHERE sreality_id="{}";'.format(prop_dict['sreality_id'])
 
         query_advert_entry = ('''SELECT entry_id FROM advert_entry_tbl WHERE ''' +
                               '''advert_tbl_advert_id="{}" AND entry_update="{}";'''.format(
