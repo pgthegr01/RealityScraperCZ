@@ -7,7 +7,7 @@ import datetime
 from mysql.connector import Error
 from mysql.connector import errorcode
 
-from RealityScraperCZ.items import PropertyItem
+#from RealityScraperCZ.items import PropertyItem
 from scrapy_splash import SplashRequest
 
 
@@ -15,7 +15,9 @@ class SrealitySpider(scrapy.Spider):
     name = 'sreality'
     allowed_domains = ['www.sreality.cz']
     base_url = 'https://www.sreality.cz'
-    start_urls = ['https://www.sreality.cz/hledani/prodej/byty']
+    start_urls = ['https://www.sreality.cz/hledani/prodej/byty',
+                  'https://www.sreality.cz/hledani/prodej/domy',
+                  'https://www.sreality.cz/hledani/prodej/pozemky']
     param_labels = []  # This is to get all the param labels.
     with open('pass.txt', 'r') as file:
         data = file.read().replace('\n', '')
@@ -183,8 +185,10 @@ class SrealitySpider(scrapy.Spider):
         ) + '''{},{},{},{},{},'''.format(
             'acceptance_year', 'building_energy_performance_certificate', 'ceiling_height', 'water',
             'building_performance_indicator',
-        ) + '''{},{},{},{},{})'''.format(
-            'year_of_reconstruction', 'housing_cost', 'garage', 'advert_tbl_advert_id', 'location3'
+        ) + '''{},{},{},{},{},'''.format(
+            'year_of_reconstruction', 'housing_cost', 'garage', 'advert_tbl_advert_id', 'location3',
+        ) + '''{})'''.format(
+            'url'
         ) + ''' VALUES ("{}","{}","{}","{}","{}",'''.format(
             prop_dict['prop_title'], prop_dict['prop_location'],
             prop_dict['Celková cena:'].replace('\xa0', '').replace('Kč', '').replace('za nemovitost','').replace(' ',''),
@@ -210,9 +214,11 @@ class SrealitySpider(scrapy.Spider):
         ) + '''"{}","{}","{}","{}","{}",'''.format(
             prop_dict['Rok kolaudace:'], prop_dict['Průkaz energetické náročnosti budovy:'],
             prop_dict['Výška stropu:'], prop_dict['Voda:'], prop_dict['Ukazatel energetické náročnosti budovy:'],
-        ) + '''"{}","{}","{}","{}", "{}");'''.format(
+        ) + '''"{}","{}","{}","{}", "{}",'''.format(
             prop_dict['Rok rekonstrukce:'], prop_dict['Náklady na bydlení:'].replace('"',''),
-            prop_dict['Garáž:'], prop_dict['sreality_id'], prop_dict['prop_location3']
+            prop_dict['Garáž:'], prop_dict['sreality_id'], prop_dict['prop_location3'],
+        ) + '''"{}");'''.format(
+            prop_dict['prop_url']
         )
                                    )
 
