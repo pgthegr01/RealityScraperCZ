@@ -238,6 +238,7 @@ class SrealitySpider(scrapy.Spider):
             if not result:
                 self.sql_insert(insert_advert_entry_tbl)
                 print("New Advert Update: {}".format(prop_dict['sreality_id']))
+        prop_dict.clear()
         yield
 
 
