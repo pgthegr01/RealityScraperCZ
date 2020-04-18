@@ -152,10 +152,12 @@ class SrealitySpider(scrapy.Spider):
 
         now = datetime.datetime.utcnow()
         sql_date = now.strftime('%Y-%m-%d')
+        yesterday = datetime.date.today() - timedelta(days=1)
+        sql_date_yesterday = yesterday.strftime('%Y-%m-%d')
 
-        query_advery = 'SELECT advert_id FROM advert_tbl WHERE advert_id={0};'.format(prop_dict['sreality_id'])
+        query_advert = 'SELECT advert_id FROM advert_tbl WHERE advert_id={0};'.format(prop_dict['sreality_id'])
 
-        query_advery_entry = ('''SELECT entry_id FROM advert_entry_tbl WHERE ''' +
+        query_advert_entry = ('''SELECT entry_id FROM advert_entry_tbl WHERE ''' +
                               '''advert_tbl_advert_id="{}" AND entry_update="{}";'''.format(
                                   prop_dict['sreality_id'],
                                   sql_date
@@ -164,6 +166,9 @@ class SrealitySpider(scrapy.Spider):
 
         if prop_dict['Aktualizace:'] == 'Dnes':
             prop_dict['Aktualizace:'] = sql_date
+        elif prop_dict['Aktualizace:'] == 'V?era':
+            prop_dict['Aktualizace:'] = sql_date_yesterday
+
 
         insert_advert_tbl = ('''INSERT INTO advert_tbl (sreality_id, submission_date) VALUES ({},"{}")'''.format(
             prop_dict['sreality_id'], sql_date))
@@ -222,14 +227,14 @@ class SrealitySpider(scrapy.Spider):
         )
                                    )
 
-        result = self.sql_query(query_advery)
+        result = self.sql_query(query_advert)
 
         if not result:
             self.sql_insert(insert_advert_tbl)
             self.sql_insert(insert_advert_entry_tbl)
             print("New Advert found: {}".format(prop_dict['sreality_id']))
         else:
-            result = self.sql_query(query_advery_entry)
+            result = self.sql_query(query_advert_entry)
             if not result:
                 self.sql_insert(insert_advert_entry_tbl)
                 print("New Advert Update: {}".format(prop_dict['sreality_id']))
