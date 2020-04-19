@@ -152,7 +152,7 @@ class SrealitySpider(scrapy.Spider):
 
         if prop_dict['Aktualizace:'] == 'Dnes':
             prop_dict['Aktualizace:'] = sql_date
-        elif prop_dict['Aktualizace:'] == 'V?era':
+        elif prop_dict['Aktualizace:'] == 'Včera':
             prop_dict['Aktualizace:'] = sql_date_yesterday
 
         query_advert = 'SELECT advert_id FROM advert_tbl WHERE sreality_id="{}";'.format(prop_dict['sreality_id'])
