@@ -193,7 +193,7 @@ class SrealitySpider(scrapy.Spider):
             prop_dict['Celková cena:'].replace('\xa0', '').replace('Kč', '').replace('za nemovitost','').replace(' ',''),
             prop_dict['prop_energy_efficiency'], prop_dict['prop_desc'],
         ) + '''"{}","{}","{}","{}","{}",'''.format(
-            prop_dict['ID:'], now.strftime('%Y-%m-%d %H:%M:%S'), prop_dict['prop_price'],
+            prop_dict['sreality_id'], now.strftime('%Y-%m-%d %H:%M:%S'), prop_dict['prop_price'],
             prop_dict['Poznámka k ceně:'], prop_dict['ID zakázky:'],
         ) + '''"{}","{}","{}","{}","{}",'''.format(
             prop_dict['Aktualizace:'], prop_dict['Stavba:'], prop_dict['Stav objektu:'],
